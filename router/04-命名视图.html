@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>04-命名视图</title>
+	</head>
+	<body>
+		<div id="app">
+			<h2>{{msg}}</h2>
+			<App />
+		</div>
+		<!-- 1. 引入Vue -->
+		<script src="../js/vue.js"></script>
+		<!-- 2. 引入VueRouter -->
+		<script src="../js/vue-router.js"></script>
+		<script type="text/javascript">
+			// 3. 让Vue使用该VueRouter
+			// Vue.use(VueRouter) // 全局可以省略，模块化时用
+
+			var Foo = {
+				template: ` <div>Foo  {{$route.name}}</div> `
+			}
+			var Bar = {
+				template: ` <div>Bar  {{$route.path }}</div> `
+			}
+			var Baz = {
+				template: ` <div>Baz  {{$route.matched[0].components.b }}</div> `,
+				created(){
+					console.log(this.$route)
+				},
+			}
+			// 4. 创建router对象
+			var router = new VueRouter({
+				routes: [{
+					name:'home',
+					path: '/',
+					components: {
+						default: Foo,
+						a: Bar,
+						b: Baz
+					}
+				}]
+			})
+			//引入vue-router模块 抛出来两个全局组件 router-link  router-view
+			var App = {
+				template: `
+				<div>  
+					<router-view class="view one"></router-view>
+					<router-view class="view two" name="a"></router-view>
+					<router-view class="view three" name="b"></router-view>
+				</div>
+				 `
+			}
+
+			var vm = new Vue({
+				el: "#app",
+				data() {
+					return {
+						msg: 'Hello VueRouter',
+					}
+				},
+				//交由实例化对象处理
+				router,
+				components: {
+					App
+				},
+				watch: {
+					'$route'(to, from) {
+						// 对路由变化作出响应...
+						console.log('对路由变化作出响应', to, from)
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

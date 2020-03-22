@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>keep-alive在路由中的使用</title> 
+	</head>
+	<body>
+		<div id="app">
+			<App />
+		</div>
+		<!-- 1. 引入Vue -->
+		<script src="../js/vue.js"></script>
+		<!-- 2. 引入VueRouter -->
+		<script src="../js/vue-router.js"></script>
+		<script type="text/javascript">
+			// 3. 让Vue使用该VueRouter
+			// Vue.use(VueRouter) // 全局可以省略，模块化时用
+
+			var Login = {
+				template: ` <div>我是登录</div> `,
+				created() {
+					console.log('登录组件创建了')
+				},
+				mounted() {
+					console.log('登录组件DOM加载了')
+				},
+				destroyed() {
+					console.log('登录组件卸载了')
+				},
+			}
+			var Resgiter = {
+				template: ` 
+				<div>
+						<h2 @click="ResgiterUser">我是注册Id：{{ msg }}</h2>
+				</div>
+				`,
+				data(){return {
+					msg:'123'
+				}},
+				created() {
+					console.log('注册组件创建了')
+				},
+				mounted() {
+					console.log('注册组件DOM加载了')
+				},
+				destroyed() {
+					console.log('注册组件卸载了')
+				},
+				methods:{
+					ResgiterUser(e){
+						console.log('点击注册');
+						this.msg='我被点击了';
+						e.target.style.color="red"
+						
+					},
+				},
+			}
+
+			// 4. 创建router对象
+			var router = new VueRouter({
+				routes: [{
+						path: "/login",
+						component: Login
+					},
+					{
+						path: "/resgiter",
+						component: Resgiter
+					}
+				]
+			})
+			//引入vue-router模块 抛出来两个全局组件 router-link  router-view
+			var App = {
+				template: `
+				<div> 
+					<router-link to="/login"> Login</router-link>
+					<router-link to="/resgiter"> Resgiter</router-link>
+					<!-- <router-view></router-view>-->
+					<!-- 缓存状态 -->
+					<keep-alive> <router-view></router-view> </keep-alive>
+				</div>
+				 `
+			}
+
+			var vm = new Vue({
+				el: "#app",
+				data() {
+					return {
+						msg: 'Hello VueRouter',
+					}
+				},
+
+				//交由实例化对象处理
+				router,
+				components: {
+					App
+				},
+
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>10-基于路由的动态过渡</title>
+		<link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
+
+		<style type="text/css">
+			.view {
+				width: 400px;
+				height: 300px;
+				background-color: aliceblue;
+				position: absolute;
+			}
+
+			.home {
+				position: absolute;
+				background-color: bisque;
+			}
+
+			/* 设置持续时间和动画函数 */
+			.fade-enter-active {
+				transition: all .3s ease;
+			}
+
+			.fade-leave-active {
+				transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+			}
+
+			.fade-enter,
+			.fade-leave-to {
+				opacity: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<!-- 引入vue-router模块 抛出来两个全局组件 router-link  router-view -->
+				<h2>{{msg}}</h2>
+				<router-link to="/home"> 首页</router-link>
+				<router-link to="/blog"> 博客</router-link>
+				<router-link to="/resgiter"> 注册</router-link>
+				<transition name="fade">
+					<router-view class="view"></router-view>
+				</transition>
+			</div>
+			
+			<!-- 1. 引入Vue -->
+			<script src="../js/vue.js"></script>
+			<!-- 2. 引入VueRouter -->
+			<script src="../js/vue-router.js"></script>
+			<script type="text/javascript">
+				// 3. 让Vue使用该VueRouter
+				Vue.use(VueRouter) // 全局可以省略，模块化时用
+				var Home = {
+					template: `
+					<div class="home" >
+							<button @click="show = !show">
+								Toggle render
+							</button>
+							<transition name="custom-classes-transition" enter-active-class="animated tada" leave-active-class="animated bounceOutRight">
+								<p v-if="show">hello</p>
+							</transition>
+					</div> `,
+					data() {
+						return {
+							show: 1,
+						}
+					},
+				}
+				var Blog = {
+					template: ` <div>我的博客页面</div> `,
+				}
+				var Login = {
+					template: ` <div>
+								<h2></h2>
+							 <div><input type="text" v-model="name" /></div>
+							 <div><input type="password" v-model="pwd" /></div>
+							 <div><input @click="SignIn" type="button" value="登录" /></div>
+				
+				</div> `,
+					data() {
+						return {
+							name: '',
+							pwd: ''
+						}
+					},
+					methods: {
+						SignIn() {
+							localStorage.setItem('userinfo', JSON.stringify({
+								name: this.name,
+								pwd: this.pwd
+							}));
+
+						},
+					}
+				}
+				var Resgiter = {
+					template: `  <div> 我是注册页面</div> `,
+				}
+
+				// 4. 创建router对象
+				var router = new VueRouter({
+					routes: [{
+							path: "/login",
+							name: 'login',
+							component: Login
+						},
+						{
+							path: "/resgiter",
+							name: 'resgiter',
+							component: Resgiter
+						},
+						{
+							path: "/home",
+							name: 'home',
+							component: Home
+						},
+						{
+							path: "/blog",
+							name: 'blog',
+							component: Blog,
+						},
+						{
+							path: "/",
+							redirect: "/home",
+						}
+					]
+				})
+
+				var vm = new Vue({
+					el: "#app",
+					data() {
+						return {
+							msg: 'Hello VueRouter',
+							transitionName: 'slide-left'
+						}
+					},
+					//交由实例化对象处理
+					router,
+					watch: {
+						'$route'(to, from) {
+							// 对路由变化作出响应...
+							// console.log('对路由变化作出响应', to, from)
+						},
+					},
+					beforeRouteUpdate(to, from, next) {
+						console.log(to)
+						const toDepth = to.path.split('/').length
+						const fromDepth = from.path.split('/').length
+						this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
+						next()
+					},
+					methods: {}
+				})
+			</script>
+	</body>
+</html>

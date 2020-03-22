@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>命名路由</title>
+	</head>
+	<body>
+		<div id="app">
+			<h2>{{msg}}</h2>
+			<App />
+		</div>
+		<!-- 1. 引入Vue -->
+		<script src="../js/vue.js"></script>
+		<!-- 2. 引入VueRouter -->
+		<script src="../js/vue-router.js"></script>
+		<script type="text/javascript">
+			// 3. 让Vue使用该VueRouter
+			// Vue.use(VueRouter) // 全局可以省略，模块化时用
+
+			// （1）xxx.html#/user/1 params 动态路由
+			// （1）xxx.html#/user?userId = 123 query
+			var UserParams = {
+				template: ` <div>UserParams  {{$route.params}}</div> `,
+				created() {
+					// 抛出来两个对象 挂载Vue实例化对象
+					console.log('抛出来对象this.$router', this.$router)
+					console.log('抛出来对象this.$route', this.$route)
+				},
+			}
+			var UserQuery = {
+				template: ` <div>UserQuery  {{$route.query }}</div> `
+			}
+			// 4. 创建router对象
+			var router = new VueRouter({
+				routes: [{
+						name: 'userP', //命名路由
+						path: "/user/:id", // 动态路由参数以冒号开头 params
+						component: UserParams
+					},
+					{
+						name: 'userQ',
+						path: "/user", //URL 中有查询参数
+						component: UserQuery
+					}
+				]
+			})
+			//引入vue-router模块 抛出来两个全局组件 router-link  router-view
+			var App = {
+				template: `
+				<div>  
+					<router-link :to="{name:'userP',params:{id:'123'}}">Go to UserParams</router-link>
+					<router-link :to="{name:'userP',params:{id:'456'}}">Go to UserParams</router-link>
+					<router-link :to="{name:'userQ',query:{userId:'111'}}">Go to UserQuery</router-link>
+					<router-view></router-view>
+				</div>
+				 `
+			}
+
+			var vm = new Vue({
+				el: "#app",
+				data() {
+					return {
+						msg: 'Hello VueRouter',
+					}
+				},
+				//交由实例化对象处理
+				router,
+				components: {
+					App
+				},
+				watch: {
+					'$route'(to, from) {
+						// 对路由变化作出响应...
+						console.log('对路由变化作出响应', to, from)
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

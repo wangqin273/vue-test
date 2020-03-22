@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>05-重定向和别名</title>
+		<style type="text/css">
+			a {
+				padding: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<h2>{{msg}}</h2>
+			<App />
+		</div>
+		<!-- 1. 引入Vue -->
+		<script src="../js/vue.js"></script>
+		<!-- 2. 引入VueRouter -->
+		<script src="../js/vue-router.js"></script>
+		<script type="text/javascript">
+			// 3. 让Vue使用该VueRouter
+			// Vue.use(VueRouter) // 全局可以省略，模块化时用
+			var A = {
+				template: ` <div>A  {{$route.name}}</div> `
+			}
+			var B = {
+				template: ` <div>B  {{$route.name}}</div> `
+			}
+			var C = {
+				template: ` <div>C  {{$route.name}}</div> `
+			}
+			var D = {
+				template: ` <div>D  {{$route.name}}</div> `
+			}
+			var Foo = {
+				template: ` <div>Foo  {{$route.name}}</div> `
+			}
+
+			// 4. 创建router对象
+			var router = new VueRouter({
+				routes: [{
+					name: 'a',
+					path: '/a',
+					component: A,
+					redirect: '/b',
+				}, {
+					name: 'b',
+					path: '/b',
+					component: B,
+				}, {
+					name: 'c',
+					path: '/c',
+					component: C,
+					redirect: {
+						name: 'foo'
+					}
+				}, {
+					name: 'd',
+					path: '/d',
+					component: D,
+					redirect: to => {
+						// 方法接收 目标路由 作为参数
+						// return 重定向的 字符串路径/路径对象
+						return '/b'
+					}
+				}, {
+					name: 'foo',
+					path: '/foo',
+					component: Foo,
+				}, ]
+			})
+			//引入vue-router模块 抛出来两个全局组件 router-link  router-view
+			var App = {
+				template: `
+				<div>  
+					<router-link to="/a">Go To A</router-link>
+					<router-link to="/b">Go To B</router-link>
+					<router-link to="/c">Go To C</router-link>
+					<router-link to="/d">Go To D</router-link>
+						<router-view/>
+				</div>
+				 `
+			}
+
+			var vm = new Vue({
+				el: "#app",
+				data() {
+					return {
+						msg: 'Hello VueRouter',
+					}
+				},
+				//交由实例化对象处理
+				router,
+				components: {
+					App
+				},
+				watch: {
+					'$route'(to, from) {
+						// 对路由变化作出响应...
+						console.log('对路由变化作出响应', to, from)
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

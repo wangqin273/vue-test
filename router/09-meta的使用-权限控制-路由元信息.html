@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>09-meta的使用-权限控制-路由元信息</title>
+	</head>
+	<body>
+		<div id="app">
+			<!-- 引入vue-router模块 抛出来两个全局组件 router-link  router-view -->
+			<div>
+				<h2>{{msg}}</h2>
+				<router-link to="/home"> 首页</router-link>
+				<router-link to="/blog"> 博客</router-link>
+				<router-link to="/resgiter"> 注册</router-link>
+				<a @click="clearUserinfo" href="javascript:;">退出登录</a>
+				<router-view></router-view>
+
+			</div>
+		</div>
+		<!-- 1. 引入Vue -->
+		<script src="../js/vue.js"></script>
+		<!-- 2. 引入VueRouter -->
+		<script src="../js/vue-router.js"></script>
+		<script type="text/javascript">
+			// 3. 让Vue使用该VueRouter
+			Vue.use(VueRouter) // 全局可以省略，模块化时用
+			var Home = {
+				template: ` <div>我是首页</div> `,
+			}
+			var Blog = {
+				template: ` <div>我的博客页面</div> `,
+			}
+			var Login = {
+				template: ` <div>
+								<h2></h2>
+							 <div><input type="text" v-model="name" /></div>
+							 <div><input type="password" v-model="pwd" /></div>
+							 <div><input @click="SignIn" type="button" value="登录" /></div>
+				
+				</div> `,
+				data() {
+					return {
+						name: '',
+						pwd: ''
+					}
+				},
+				methods: {
+					SignIn() {
+						localStorage.setItem('userinfo', JSON.stringify({
+							name: this.name,
+							pwd: this.pwd
+						}));
+						this.$router.push({
+							name: "blog"
+						})
+						.then((e)=>{
+							console.log(e)
+						}).catch(err=>{
+							console.log(err)
+						})
+					},
+				}
+			}
+			var Resgiter = {
+				template: `  <div> 我是注册页面</div> `,
+			}
+
+			// 4. 创建router对象
+			var router = new VueRouter({
+				routes: [{
+						path: "/login",
+						name: 'login',
+						component: Login
+					},
+					{
+						path: "/resgiter",
+						name: 'resgiter',
+						component: Resgiter
+					},
+					{
+						path: "/home",
+						name: 'home',
+						component: Home
+					},
+					{
+						path: "/blog",
+						name: 'blog',
+						component: Blog,
+						// 给未来的路由做权限控制
+						meta: {
+							// 证明用户访问该组件的时候需要登录
+							auth: true
+						}
+					},
+					{
+						path: "/",
+						redirect: "/home",
+					}
+				]
+			})
+			// 在全局导航守卫中检查元字段：
+			router.beforeEach((to, from, next) => {
+				// console.log(to.matched.some(record => record.meta.auth))
+				var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+				if (to.meta.auth) {
+					if (userinfo && userinfo.name == 'wq' && userinfo.pwd == '123') {
+						next()
+					} else {
+						next({
+							// name: 'resgiter',//优先
+							path: '/login'
+						}) 
+					}
+				} else {
+					next()
+				}
+			})
+		 
+			var vm = new Vue({
+				el: "#app",
+				data() {
+					return {
+						msg: 'Hello VueRouter',
+					}
+				},
+				//交由实例化对象处理
+				router,
+				watch: {
+					'$route'(to, from) {
+						// 对路由变化作出响应...
+						// console.log('对路由变化作出响应', to, from)
+					},
+				},
+				methods: {
+					clearUserinfo() {
+						localStorage.removeItem('userinfo')
+						// localStorage.clear()
+					},
+				}
+			})
+		</script>
+	</body>
+</html>

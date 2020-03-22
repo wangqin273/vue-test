@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>06-动态路由匹配</title>
+	</head>
+	<body>
+		<div id="app">
+			<App />
+		</div>
+		<!-- 1. 引入Vue -->
+		<script src="../js/vue.js"></script>
+		<!-- 2. 引入VueRouter -->
+		<script src="../js/vue-router.js"></script>
+		<script type="text/javascript">
+			// 3. 让Vue使用该VueRouter
+			// Vue.use(VueRouter) // 全局可以省略，模块化时用
+
+			var Login = {
+				template: ` <div>我是登录</div> `
+			}
+			var Resgiter = {
+				template: ` <div>
+				<h2>我是注册Id：{{ $route.params.id }}</h2>
+				
+				<router-link :to="{name:'comDesc',params:{id:'frontend'}}"> 前端</router-link> 
+				<router-link :to="{name:'comDesc',params:{id:'backend'}}"> 后端</router-link> 
+				<router-view></router-view>
+				</div> 
+				`
+			}
+			var ComDesc = {
+				template: ` <div>{{$route&&$route.params&&$route.params.id}}  </div> `, 
+				
+				created(){
+						console.log('子组件加载' )
+				},
+				watch: {
+					'$route'(to, from) {
+						// 对路由变化作出响应...
+						console.log('对路由变化作出响应', to, from)
+					},
+					// '$route.params.id'(to, from){
+					// 	console.log(from)
+					// }
+				}
+			}
+			// 4. 创建router对象
+			var router = new VueRouter({
+				routes: [{
+						path: "/login",
+						component: Login
+					},
+					{
+						path: "/resgiter",
+						component: Resgiter,
+						children: [{
+							name: 'comDesc',
+							component: ComDesc,
+							path: '/resgiter/:id'
+						}]
+					}
+				]
+			})
+			//引入vue-router模块 抛出来两个全局组件 router-link  router-view
+			var App = {
+				template: `
+				<div> 
+					<router-link to="/login"> Login</router-link>
+					<router-link to="/resgiter"> Resgiter</router-link>
+					<router-view></router-view>
+				</div>
+				 `
+			}
+
+			var vm = new Vue({
+				el: "#app",
+				data() {
+					return {
+						msg: 'Hello VueRouter',
+					}
+				},
+
+				//交由实例化对象处理
+				router,
+				components: {
+					App
+				},
+
+			})
+		</script>
+	</body>
+</html>
