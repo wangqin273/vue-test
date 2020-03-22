@@ -40,17 +40,7 @@ module.exports = {
 				// 处理ES6
 				test: /\.js$/,
 				loader: 'babel-loader',
-				exclude: '/node_modules/',
-				options: {
-					presets: [
-						[
-							'@babel/preset-env', 
-							{
-							"useBuiltIns": "entry"
-						}]
-					],
-					plugins: ['@babel/transform-runtime']
-				}
+				exclude: '/node_modules/'
 				/** 
 				 由于babel-preset配置选项较多，我们一般可以在根目录下建立.babelrc文件，专门用来放置babel preset配置，这是一个json文件
 				**/
