@@ -12,9 +12,9 @@ new Vue({
 	// 	App
 	// },
 	// template: '<App/>',
-	created() {
+	created() { 
 		console.log(Math.random() * 10)
-		var array = [1, 2, 3, 4, 5, 6];
+		let array = [1, 2, 3, 4, 5, 6];
 		array.includes( (item)=> {
 		  return item > 2;
 		});

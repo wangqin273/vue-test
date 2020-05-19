@@ -8,6 +8,12 @@ module.exports = {
 		filename: './build.js',
 		path: path.resolve('./dist') //相对路径转绝对路径
 	},
+	plugins: [
+		new webpack.ProgressPlugin(),
+		new HtmlWebpackPlugin({
+			template: './src/index.html'
+		})
+	],
 	module: {
 		rules: [{
 				test: /\.css$/,
@@ -42,14 +48,15 @@ module.exports = {
 				loader: 'babel-loader',
 				exclude: '/node_modules/',
 				options: {
-					presets: [
+					"presets": [
 						[
-							'@babel/preset-env', 
+							"@babel/preset-env",
 							{
-							"useBuiltIns": "entry"
-						}]
+								"useBuiltIns": "entry"
+							}
+						]
 					],
-					plugins: ['@babel/transform-runtime']
+					"plugins": []
 				}
 				/** 
 				 由于babel-preset配置选项较多，我们一般可以在根目录下建立.babelrc文件，专门用来放置babel preset配置，这是一个json文件
@@ -57,11 +64,6 @@ module.exports = {
 			}
 		]
 	},
-	plugins: [
-		new webpack.ProgressPlugin(),
-		new HtmlWebpackPlugin({
-			template: './src/index.html'
-		})
-	],
+
 	watch: true
 }
