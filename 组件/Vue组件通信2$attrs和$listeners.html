@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>组件</title>
+	</head>
+	<body>
+		<div id="app">
+			<app />
+		</div>
+		<!-- 1. 引入Vue -->
+		<script src="../js/vue.js"></script>
+		<script type="text/javascript">
+			/*		$attrs和$listeners
+			第一种方式处理父子组件之间的数据传输有个问题:如果父组件A下面有子组件B,组件B下面有组件C,这时如果组件A想传递数据给组件C怎么办？,
+			如果采用第一种方法,我们必须让组件A通过prop传递详情给组件B,组件B再通过prop专递想想给组件C;
+			要是组件A和组件C之间有更多组件,采用这种方式就很复杂
+			Vue2.4开始提供了	$attrs和$listeners来解决这个问题,能够让组件A直接传递消息给组件C
+			*/
+
+			// 全局组件 
+			Vue.component('C', {
+				template: `
+				<div> 
+			  <div @click="cClickHander">子组件{{$attrs.message}}</div>
+				</div>
+				`,
+				methods: {
+					cClickHander() {
+						this.$emit('getCData', '包含了父作用域中的 (不含 .native 修饰器的) v-on 事件监听器。它可以通过 v-on="$listeners" 传入内部组件——在创建更高层次的组件时非常有用。')
+					}
+				}
+			})
+			Vue.component('B', {
+				template: `
+		 	<div>
+		 	 	 <C v-bind="$attrs" v-on="$listeners"></C>
+		 	</div>
+		 	`,
+			})
+			Vue.component('A', {
+				data() {
+					return {
+						 
+					}
+				},
+				props: ['msg'],
+				template: `
+				<div>
+				<p>{{msg}}</p>
+					<div></div>
+					<input type="text" v-model="$attrs.message" />
+					<B v-bind="$attrs" v-on="$listeners"></B>
+				</div>
+				`
+			})
+			var App = {
+				data() {
+					return {
+						msg: '$attrs包含了父作用域中不作为 prop 被识别 (且获取) 的 attribute 绑定 (class 和 style 除外)。当一个组件没有声明任何 prop 时，这里会包含所有父作用域的绑定 (class 和 style 除外)，并且可以通过 v-bind="$attrs" 传入内部组件——在创建高级别的组件时非常有用。',
+						message: 'hello C'
+					}
+				},
+				template: `
+				<div> 
+					<p>我是父组件标题</p>
+					<A :msg="msg" :message="message" @getCData="getCData" /> 
+				</div>
+				 `,
+				methods: {
+					getCData(val) {
+						console.log(val)
+					}
+				},
+			}
+
+			var vm = new Vue({
+				el: "#app",
+				data() {
+					return {}
+				},
+				components: {
+					App
+				},
+			})
+		</script>
+	</body>
+</html>

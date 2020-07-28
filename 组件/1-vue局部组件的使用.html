@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>组件</title>
+	</head>
+	<body>
+		<div id="app">
+			<App />
+		</div>
+		<!-- 1. 引入Vue -->
+		<script src="../js/vue.js"></script> 
+		<script type="text/javascript">
+			// 全局组件
+			Vue.component('Vbtn', {
+				template: `
+				<button>按钮</button>
+				`
+			})
+
+			// 局部组件
+			var Vheader = {
+				data() {
+					return {
+						msg: '头部组件 ',
+					}
+				},
+				template: `
+		  	<div> 
+		  		头部组件
+					<Vbtn/>
+		  	</div>
+		  	 `
+			}
+			var Vaside = {
+				data() {
+					return {
+						msg: '侧边栏组件 ',
+					}
+				},
+				template: `
+				<div> 
+					侧边栏组件	<Vbtn/>
+				</div>
+				 `
+			}
+			var Vcontent = {
+				data() {
+					return {
+						msg: '内容组件 ',
+					}
+				},
+				template: `
+				<div> 
+					内容组件	<Vbtn/>
+				</div>
+				 `
+			}
+			var App = {
+				data() {
+					return {
+						msg: 'Hello 组件通信',
+					}
+				},
+				components: {
+					Vheader,
+					Vaside,
+					Vcontent
+				},
+				template: `
+				<div> 
+					 <span>{{msg}}</span>
+					 <Vheader />
+					 <Vaside />
+					 <Vcontent />
+					 	<Vbtn/>
+				</div>
+				 `
+			}
+
+			var vm = new Vue({
+				el: "#app",
+				data() {
+					return {
+						 
+					}
+				},
+				components: {
+					App
+				},
+			})
+		</script>
+	</body>
+</html>

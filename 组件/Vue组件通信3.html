@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>组件</title>
+	</head>
+	<body>
+		<div id="app">
+			<App />
+		</div>
+		<!-- 1. 引入Vue -->
+		<script src="../js/vue.js"></script> 
+		<script type="text/javascript">
+			// 全局组件
+		console.log(	)
+			Vue.component('Child', {
+				template: `
+				<div>
+				{{childData}}
+				<p>子组件</p>
+					<input v-model="childData">
+				</div>
+				`,
+				props: ['childData'],
+				components: {
+					// Parent, 
+				},
+			})
+			// 1.给父组件中自定义的属性
+			// 2.在子组件中使用props接收父组件传递的数据
+			// 3.可以在子组件中任意使用
+			Vue.component('Parent', {
+				data() {
+					return {
+						msg: '父组件数据',
+					}
+				},
+				template: `
+				<div>
+				父组件<Child :childData='msg' />
+				</div>
+				`
+			})
+			var App = {
+				data() {
+					return {
+						msg: '',
+					}
+				},
+				components: {
+					// Parent, 
+				},
+				template: `
+				<div> 
+					<Parent/>
+					 
+				</div>
+				 `
+			}
+
+			var vm = new Vue({
+				el: "#app",
+				data() {
+					return {
+					 
+					}
+				},
+				components: {
+					App
+				},
+			})
+		</script>
+	</body>
+</html>
