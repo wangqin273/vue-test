@@ -9,17 +9,16 @@ module.exports = {
 		path: path.resolve('./dist') //相对路径转绝对路径
 	},
 	module: {
-		rules: [
-			{
-				test: /\.css$/, 
-				use: ['style-loader', 'css-loader','postcss-loader'] //顺序不能变
+		rules: [{
+				test: /\.css$/,
+				use: ['style-loader', 'css-loader', 'postcss-loader'] //顺序不能变
 			},
 			{
-				test: /\.scss$/, 
+				test: /\.scss$/,
 				use: ['style-loader', 'css-loader', 'sass-loader'] //顺序不能变
 			},
 			{
-				test: /\.less$/, 
+				test: /\.less$/,
 				use: ['style-loader', 'css-loader', 'less-loader'] //顺序不能变
 			},
 			{
