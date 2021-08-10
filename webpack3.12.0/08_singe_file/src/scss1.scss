@@ -1,10 +1,11 @@
 // scss1.scss文件
 // cnpm install sass-loader css-loader style-loader --save-dev
-$color: red;
+$color: #0ff;
 $imgPath: './images/my.jpg';
 #header {
 	height: 200px;
 	border: 1px solid $color;
 	background-image: url($imgPath);
 	background-size: cover;
+	border-radius: 20px;
 }

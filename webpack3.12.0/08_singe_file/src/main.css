@@ -3,19 +3,29 @@ body {
 	background-color: lightgray;
 }
 
-img {
+/* img {
 	width: 300px;
 	height: 150px;
 }
-
-.img {
+ */
+.img-bg {
 	width: 200px;
 	height: 200px;
 	background-image: url(./images/my.jpg);
 	background-size: cover;
 	transform: rotate(90deg);
+		border-radius: 10px;
 }
-
+.img{
+	width: 100%;
+}
+img[lazy=loading] {
+  width: 400px;
+  height: 300px;
+  margin: auto;
+}
+ul, li,
+ul li img{width: 100%;}
 /* 自动添加css3前缀
 1、npm install -D postcss-loader autoprefixer 
 2、在根目录下添加文件postcss.config.js

@@ -12,7 +12,7 @@ module.exports = {
 	module: {
 		rules: [{
 				test: /\.css$/,
-				use: ['style-loader', 'css-loader', 'postcss-loader'] //顺序不能变
+				use: [ 'style-loader','css-loader', 'sass-loader'] //顺序不能变
 			},
 			{
 				test: /\.scss$/,
@@ -33,7 +33,7 @@ module.exports = {
 					options: {
 						limit: 200000, //大于200000,转图片路径;小于200000,转Base64
 						name: 'imgs/[hash:8].[name].[ext]', //加hash值 生成新文件
-						outputPath: 'images', //图片打包出去的目录  如果name中写了，此处不写  
+						// outputPath: 'images', //图片打包出去的目录  如果name中写了，此处不写  
 					}
 				}]
 			},
@@ -52,6 +52,7 @@ module.exports = {
 			}
 		]
 	},
+
 	plugins: [
 		new webpack.ProgressPlugin(),
 		new HtmlWebpackPlugin({

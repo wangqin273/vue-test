@@ -1,0 +1,14 @@
+/* cnpm install sass-loader@7.3.1 --save-dev */
+body {
+	background-color: #FFE4C4;
+}
+
+ 
+.img { 
+		border-radius: 100px;
+}
+
+/* 自动添加css3前缀
+1、npm install -D postcss-loader autoprefixer 
+2、在根目录下添加文件postcss.config.js
+*/
