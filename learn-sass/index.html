@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<link rel="stylesheet" type="text/css" href="css/index.css" />
+		<title></title>
+	</head>
+	<body>
+		<div class="head">
+			<div class="head-left">
+				<img src="images/logo-yixing.png">
+				医星
+			</div>
+			<ul class="head-right">
+				<li class="active"> <a href="">首页</a> </li>
+				<li> <a href="">联系我们</a> </li>
+			</ul>
+		</div>
+		<div class="banner">
+			<img src="images/banner-yixing.png" alt="">
+			<div class="banner-text"> 上海医星网络科技有限公司 </div>
+		</div>
+		<a class="amrnb"  href="http://mt-development.oss-cn-hangzhou.aliyuncs.com/love/user_voice_signatures/path/EF705B03B1EFB69F70EC18D6DCDB9382.amr" download="">播放</a>
+		
+		<a class="audio-amr" 
+			data-src="http://mt-development.oss-cn-hangzhou.aliyuncs.com/love/user_voice_signatures/path/EF705B03B1EFB69F70EC18D6DCDB9382.amr">播放音频</a>
+			<a class="audio-amr"
+				data-src="http://mt-development.oss-cn-hangzhou.aliyuncs.com/love/user_voice_signatures/path/271B310A8220AF8A4DB334D3732FAD1D.amr">播放音频</a>
+		<script src="amr/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="amr/amrnb.js" type="text/javascript" charset="utf-8"></script>
+		<script src="amr/amrplayer.js" type="text/javascript" charset="utf-8"></script>
+		<!-- <script src="amr/audiocontext.js" type="text/javascript" charset="utf-8"></script> -->
+		<script type="text/javascript">
+			// unmuteButton.addEventListener('click', function() {
+			// 	var url = $(this).data('src')
+			// 	var player = new AmrPlayer(url);
+			// 	console.log(url)  
+			// 	setTimeout(function() {  
+			// 		// console.log(player) 
+			// 		player.toggle(); 
+			// 	}, 10) 
+			// });
+
+			$(".audio-amr").click(function() {
+
+				var url = $(this).data('src');
+				var is_playing = $(this).data('is_playing')
+				var $this = $(this)
+				var player = new AmrPlayer(url,null,function(){
+					setTimeout(function(){ 
+						if(is_playing){
+						
+							 	console.log('播放中')
+						}else{
+								player.play()
+								$this.data('is_playing',1); 
+							 	console.log('未播放')
+						}
+						// player.toggle()
+						player.endedWith(()=>{
+								$this.data('is_playing',0); 
+						 	 })
+						console.log('player',	$this.data('is_playing'))
+					},10)
+				
+				});
+				// var is_playing = $(this).data('is_playing')
+				// if(is_playing){
+				// 	 	console.log('播放中')
+				// }else{
+				// 	 	console.log('未播放')
+				// }
+				// var text = is_playing?'播放音频':'停止播放'
+				// console.log('is_playing',is_playing)
+				// setTimeout(() => {
+				// 	$(this).html(text)
+				
+				// 	is_playing ? player.pause() : player.play();
+				// 		// $(this).data('is_playing',!is_playing);
+				// 	// player.endedWith(()=>{
+				// 	// 	$(this).html("播放音频")
+				// 	// 	console.log('endedWith')
+				// 		$(this).data('is_playing',!is_playing);
+				// 	// })
+				// }, 10)
+			})
+		</script>
+	</body>
+</html>
