@@ -14,15 +14,8 @@
 *  3. toggle() // play() when paused or pause() when playing
 *  3. endWith(callback) // fire callback with ended event
 * */
-var last_amr_url
 var AmrPlayer = function(amr_url, download_success_cb, download_progress_cb){
-	 if(last_amr_url==amr_url){ 
-		  // this.init(amr_url, download_success_cb, download_progress_cb);
-	 }else{
-		 last_amr_url = amr_url; 
-		  this.init(last_amr_url, download_success_cb, download_progress_cb);
-	 }
-   
+    this.init(amr_url, download_success_cb, download_progress_cb);
 };
 AmrPlayer.prototype = {
     init: function(amr_url, download_success_cb, download_progress_cb){
@@ -48,6 +41,7 @@ AmrPlayer.prototype = {
         var self = this;
         var xhr = new XMLHttpRequest();
         xhr.open('GET', amr_url);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.responseType = 'blob';
         xhr.onreadystatechange = function(e) {
             if ( xhr.readyState == 4 && xhr.status == 200 ) {
@@ -115,10 +109,8 @@ AmrPlayer.prototype = {
         }
         return this.audioContext;
     },
-    play: function(){ 
-			
+    play: function(){
         if( !this.isPlaying && this.canPlay ){
-					
             this.bufferSource.start();
             this.isPlaying = true;
         }
@@ -136,7 +128,6 @@ AmrPlayer.prototype = {
         }
     },
     toggle: function(){
-				console.log(this.canPlay ,'isPlaying',this.isPlaying)
         this.isPlaying ? this.pause() : this.play();
     },
     endedWith: function(cb){
